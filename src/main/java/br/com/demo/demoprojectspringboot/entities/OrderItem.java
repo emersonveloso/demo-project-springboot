@@ -2,7 +2,9 @@ package br.com.demo.demoprojectspringboot.entities;
 
 import java.io.Serializable;
 
-import br.com.demo.demoprojectspringboot.entities.pk.OrderItemPk;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import br.com.demo.demoprojectspringboot.entities.pk.OrderItemPK;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -10,17 +12,15 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "tb_order_item")
 public class OrderItem implements Serializable {
-
     private static final long serialVersionUID = 1L;
 
     @EmbeddedId
-    private OrderItemPk id;
-    
+    private OrderItemPK id = new OrderItemPK();
+
     private Integer quantity;
     private Double price;
 
     public OrderItem() {
-
     }
 
     public OrderItem(Order order, Product product, Integer quantity, Double price) {
@@ -30,6 +30,7 @@ public class OrderItem implements Serializable {
         this.price = price;
     }
 
+    @JsonIgnore
     public Order getOrder() {
         return id.getOrder();
     }
@@ -44,14 +45,6 @@ public class OrderItem implements Serializable {
 
     public void setProduct(Product product) {
         id.setProduct(product);
-    }
-
-    public OrderItemPk getId() {
-        return id;
-    }
-
-    public void setId(OrderItemPk id) {
-        this.id = id;
     }
 
     public Integer getQuantity() {
@@ -94,5 +87,4 @@ public class OrderItem implements Serializable {
             return false;
         return true;
     }
-
 }

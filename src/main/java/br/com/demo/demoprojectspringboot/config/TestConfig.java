@@ -10,10 +10,12 @@ import org.springframework.context.annotation.Profile;
 
 import br.com.demo.demoprojectspringboot.entities.Category;
 import br.com.demo.demoprojectspringboot.entities.Order;
+import br.com.demo.demoprojectspringboot.entities.OrderItem;
 import br.com.demo.demoprojectspringboot.entities.Product;
 import br.com.demo.demoprojectspringboot.entities.User;
 import br.com.demo.demoprojectspringboot.entities.enums.OrderStatus;
 import br.com.demo.demoprojectspringboot.repositories.CategoryRepository;
+import br.com.demo.demoprojectspringboot.repositories.OrderItemRepository;
 import br.com.demo.demoprojectspringboot.repositories.OrderRepository;
 import br.com.demo.demoprojectspringboot.repositories.ProductRepository;
 import br.com.demo.demoprojectspringboot.repositories.UserRepository;
@@ -34,6 +36,9 @@ public class TestConfig implements CommandLineRunner {
     @Autowired
     private ProductRepository productRepository;
 
+    @Autowired
+    private OrderItemRepository orderItemRepository;
+
     @Override
     public void run(String... args) throws Exception {
 
@@ -50,9 +55,9 @@ public class TestConfig implements CommandLineRunner {
         User user1 = new User(null, "Maria Brown", "maria@gmail.com", "988888888", "123456");
         User user2 = new User(null, "Alex Green", "alex@gmail.com", "977777777", "123456");
 
-        Order order1 = new Order(null, Instant.parse("2019-06-20T19:53:07Z"), OrderStatus.PAID, user1);
-        Order order2 = new Order(null, Instant.parse("2019-07-21T03:42:10Z"), OrderStatus.WAITING_PAYMENT, user2);
-        Order order3 = new Order(null, Instant.parse("2019-07-22T15:21:22Z"), OrderStatus.WAITING_PAYMENT, user1);
+        Order o1 = new Order(null, Instant.parse("2019-06-20T19:53:07Z"), OrderStatus.PAID, user1);
+        Order o2 = new Order(null, Instant.parse("2019-07-21T03:42:10Z"), OrderStatus.WAITING_PAYMENT, user2);
+        Order o3 = new Order(null, Instant.parse("2019-07-22T15:21:22Z"), OrderStatus.WAITING_PAYMENT, user1);
 
         categoryRepository.saveAll(Arrays.asList(cat1, cat2, cat3));
         productRepository.saveAll(Arrays.asList(p1, p2, p3, p4, p5));
@@ -67,7 +72,14 @@ public class TestConfig implements CommandLineRunner {
         productRepository.saveAll(Arrays.asList(p1, p2, p3, p4, p5));
 
         userRepository.saveAll(Arrays.asList(user1, user2));
-        orderRepository.saveAll(Arrays.asList(order1, order2, order3));
+        orderRepository.saveAll(Arrays.asList(o1, o2, o3));
+
+        OrderItem oi1 = new OrderItem(o1, p1, 2, p1.getPrice());
+        OrderItem oi2 = new OrderItem(o1, p3, 1, p3.getPrice());
+        OrderItem oi3 = new OrderItem(o2, p3, 2, p3.getPrice());
+        OrderItem oi4 = new OrderItem(o3, p5, 2, p5.getPrice());
+
+        orderItemRepository.saveAll(Arrays.asList(oi1, oi2, oi3, oi4));
     }
 
 }
